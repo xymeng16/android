@@ -73,6 +73,7 @@ import com.owncloud.android.lib.common.UserInfo;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.ui.events.TokenPushEvent;
 import com.owncloud.android.utils.DisplayUtils;
@@ -163,6 +164,10 @@ public class UserInfoActivity extends FileActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.user_info_menu, menu);
 
+        if (!shouldShowEditDetailsMenuItem()) {
+            menu.removeItem(R.id.edit_accont);
+        }
+
         return true;
     }
 
@@ -179,6 +184,9 @@ public class UserInfoActivity extends FileActivity {
             case R.id.delete_account:
                 openAccountRemovalConfirmationDialog(account, getFragmentManager(), false);
                 break;
+            case R.id.edit_accont:
+                openEditAccountActivity();
+                break;
             default:
                 retval = super.onOptionsItemSelected(item);
                 break;
@@ -189,6 +197,12 @@ public class UserInfoActivity extends FileActivity {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    private boolean shouldShowEditDetailsMenuItem() {
+        OwnCloudVersion version =
+                com.owncloud.android.lib.common.accounts.AccountUtils.getServerVersionForAccount(account, this);
+        return true;//version.compareTo(OwnCloudVersion.nextcloud_14) >= 0;
     }
 
     private void setMultiListLoadingMessage() {
@@ -273,7 +287,7 @@ public class UserInfoActivity extends FileActivity {
         }
         
         if (userInfo.getPhone() == null && userInfo.getEmail() == null && userInfo.getAddress() == null
-                && userInfo.getTwitter() == null & userInfo.getWebpage() == null) {
+                && userInfo.getTwitter() == null & userInfo.getWebsite() == null) {
 
             setErrorMessageForMultiList(getString(R.string.userinfo_no_info_headline),
                     getString(R.string.userinfo_no_info_text), R.drawable.ic_user);
@@ -293,7 +307,7 @@ public class UserInfoActivity extends FileActivity {
         addToListIfNeeded(result, R.drawable.ic_phone, userInfo.getPhone(), R.string.user_info_phone);
         addToListIfNeeded(result, R.drawable.ic_email, userInfo.getEmail(), R.string.user_info_email);
         addToListIfNeeded(result, R.drawable.ic_map_marker, userInfo.getAddress(), R.string.user_info_address);
-        addToListIfNeeded(result, R.drawable.ic_web, DisplayUtils.beautifyURL(userInfo.getWebpage()),
+        addToListIfNeeded(result, R.drawable.ic_web, DisplayUtils.beautifyURL(userInfo.getWebsite()),
                     R.string.user_info_website);
         addToListIfNeeded(result, R.drawable.ic_twitter, DisplayUtils.beautifyTwitterHandle(userInfo.getTwitter()),
                     R.string.user_info_twitter);
@@ -323,6 +337,14 @@ public class UserInfoActivity extends FileActivity {
         UserInfoActivity.AccountRemovalConfirmationDialog dialog =
                 UserInfoActivity.AccountRemovalConfirmationDialog.newInstance(account, removeDirectly);
         dialog.show(fragmentManager, "dialog");
+    }
+
+
+    private void openEditAccountActivity() {
+        Intent intent = new Intent(this, EditUserInfoActivity.class);
+        intent.putExtra(EditUserInfoActivity.KEY_ACCOUNT, Parcels.wrap(account));
+        intent.putExtra(EditUserInfoActivity.KEY_ACCOUNT_INFO, Parcels.wrap(userInfo));
+        startActivity(intent);
     }
 
     public static class AccountRemovalConfirmationDialog extends DialogFragment {
