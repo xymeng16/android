@@ -11,4 +11,9 @@
         android:title="@string/delete_account">
     </item>
 
+    <item
+        android:id="@+id/edit_accont"
+        android:title="@string/edit_account">
+    </item>
+
 </menu>

@@ -14,5 +14,6 @@
     <application
         android:testOnly="false"
         android:allowBackup="false"
-        tools:ignore="GoogleAppIndexingWarning"/>
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup"/>
 </manifest>
