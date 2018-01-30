@@ -302,7 +302,9 @@ public class ActivitiesListActivity extends FileActivity implements ActivityList
             }
         );
 
-        t.start();
+        if (currentAccount != null) {
+            t.start();
+        }
     }
 
     private void hideRefreshLayoutLoader() {
