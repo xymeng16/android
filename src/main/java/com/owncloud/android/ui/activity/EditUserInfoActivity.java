@@ -10,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,11 +85,13 @@ public class EditUserInfoActivity extends FileActivity implements View.OnClickLi
         mViewModel = ViewModelProviders.of(this).get(EditUserInfoViewModel.class);
         mViewModel.setAccount(account);
 
-        mViewModel.getSaveStatus().observe(this, savingStatus->{
+        mViewModel.getSaveStatus().observe(this, savingStatus-> {
             mFAB.setEnabled(true);
             mFABProgress.hide();
             if (!savingStatus.succeed()) {
-                Snackbar.make(mEditList, "ASD", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mEditList, R.string.user_info_edit_failed, Snackbar.LENGTH_LONG).show();
+            } else {
+                finish();
             }
         });
 

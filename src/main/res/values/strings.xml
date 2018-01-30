@@ -626,6 +626,8 @@
     <string name="user_info_website">Website</string>
     <string name="user_info_twitter">Twitter</string>
 
+    <string name="user_info_edit_failed">Error occurred while updating user information.</string>
+
     <string name="user_information_retrieval_error">Error retrieving user information</string>
 
     <!-- Activities -->
