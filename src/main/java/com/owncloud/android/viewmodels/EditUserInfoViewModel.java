@@ -28,7 +28,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.owncloud.android.lib.common.UserInfo;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -87,16 +86,16 @@ public class EditUserInfoViewModel extends AndroidViewModel {
 
             boolean overallSuccess = true;
 
-            if (!TextUtils.isEmpty(info.getTwitter()))
+            if (info.getTwitter() != null)
                 overallSuccess = singleFieldUpdate(info.getId(), "twitter", info.getTwitter());
 
-            if (!TextUtils.isEmpty(info.getAddress()))
+            if (info.getAddress() != null)
                 overallSuccess &= singleFieldUpdate(info.getId(), "address", info.getAddress());
 
-            if (!TextUtils.isEmpty(info.getWebsite()))
+            if (info.getWebsite() != null)
                 overallSuccess &= singleFieldUpdate(info.getId(), "website", info.getWebsite());
 
-            if (!TextUtils.isEmpty(info.getPhone()))
+            if (info.getPhone() != null)
                 overallSuccess &= singleFieldUpdate(info.getId(), "phone", info.getPhone());
 
             return overallSuccess;
