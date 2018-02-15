@@ -211,11 +211,6 @@ public class AccountUtils {
         return serverVersion;
     }
 
-    public static boolean hasSearchUsersSupport(Account account){
-        OwnCloudVersion serverVersion = getServerVersion(account);
-        return (serverVersion != null && serverVersion.isSearchUsersSupported());
-    }
-
     public static boolean hasSearchSupport(Account account) {
         OwnCloudVersion serverVersion = getServerVersion(account);
         return (serverVersion != null && serverVersion.isSearchSupported());

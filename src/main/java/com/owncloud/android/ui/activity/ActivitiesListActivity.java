@@ -410,7 +410,7 @@ public class ActivitiesListActivity extends FileActivity implements ActivityList
                         RemoteOperation synchFolderOp = new RefreshFolderOperation(ocFile,
                                 System.currentTimeMillis(),
                                 false,
-                                getFileOperationsHelper().isSharedSupported(),
+                                true,
                                 true,
                                 getStorageManager(),
                                 getAccount(),

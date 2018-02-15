@@ -24,6 +24,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -79,18 +80,19 @@ public class CreateFolderDialogFragment
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color);
         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(color);
     }
-    
+
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         int accentColor = ThemeUtils.primaryAccentColor();
         mParentFolder = getArguments().getParcelable(ARG_PARENT_FOLDER);
-        
+
         // Inflate the layout for the dialog
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.edit_box_dialog, null);
-        
+
         // Setup layout 
-        EditText inputText = ((EditText)v.findViewById(R.id.user_input));
+        EditText inputText = v.findViewById(R.id.user_input);
         inputText.setText("");
         inputText.requestFocus();
         inputText.getBackground().setColorFilter(accentColor, PorterDuff.Mode.SRC_ATOP);
@@ -98,8 +100,8 @@ public class CreateFolderDialogFragment
         // Build the dialog  
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(v)
-               .setPositiveButton(R.string.common_ok, this)
-               .setNegativeButton(R.string.common_cancel, this)
+                .setPositiveButton(R.string.common_ok, this)
+                .setNegativeButton(R.string.common_cancel, this)
                 .setTitle(ThemeUtils.getColoredTitle(getResources().getString(R.string.uploader_info_dirname),
                         accentColor));
         Dialog d = builder.create();
@@ -119,24 +121,15 @@ public class CreateFolderDialogFragment
                 DisplayUtils.showSnackMessage(getActivity(), R.string.filename_empty);
                 return;
             }
-            boolean serverWithForbiddenChars = ((ComponentsGetter)getActivity()).
-                    getFileOperationsHelper().isVersionWithForbiddenCharacters();
 
-            if (!FileUtils.isValidName(newFolderName, serverWithForbiddenChars)) {
-
-                if (serverWithForbiddenChars) {
-                    DisplayUtils.showSnackMessage(getActivity(), R.string.filename_forbidden_charaters_from_server);
-                } else {
-                    DisplayUtils.showSnackMessage(getActivity(), R.string.filename_forbidden_characters);
-                }
+            if (!FileUtils.isValidName(newFolderName)) {
+                DisplayUtils.showSnackMessage(getActivity(), R.string.filename_forbidden_charaters_from_server);
 
                 return;
             }
-            
-            String path = mParentFolder.getRemotePath();
-            path += newFolderName + OCFile.PATH_SEPARATOR;
-            ((ComponentsGetter)getActivity()).
-                getFileOperationsHelper().createFolder(path, false);
+
+            String path = mParentFolder.getRemotePath() + newFolderName + OCFile.PATH_SEPARATOR;
+            ((ComponentsGetter) getActivity()).getFileOperationsHelper().createFolder(path, false);
         }
     }
 }

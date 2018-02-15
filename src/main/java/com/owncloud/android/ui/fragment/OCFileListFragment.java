@@ -75,7 +75,6 @@ import com.owncloud.android.lib.resources.files.SearchOperation;
 import com.owncloud.android.lib.resources.files.ToggleEncryptionOperation;
 import com.owncloud.android.lib.resources.files.ToggleFavoriteOperation;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesOperation;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
@@ -1224,10 +1223,7 @@ public class OCFileListFragment extends ExtendedListFragment implements OCFileLi
         if (!mJustFolders) {
             updateFooter();
             // decide grid vs list view
-            OwnCloudVersion version = AccountUtils.getServerVersion(
-                    ((FileActivity) mContainerActivity).getAccount());
-            if (version != null && version.supportsRemoteThumbnails() &&
-                    isGridViewPreferred(mFile)) {
+            if (isGridViewPreferred(mFile)) {
                 switchToGridView();
             } else {
                 switchToListView();
