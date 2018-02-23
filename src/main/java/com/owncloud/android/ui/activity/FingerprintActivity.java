@@ -93,7 +93,7 @@ public class FingerprintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fingerprintlock);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getWindow() != null) {
             getWindow().setStatusBarColor(ThemeUtils.primaryDarkColor(this));
         }
 
