@@ -139,7 +139,7 @@ public class PushUtils {
         return -2;
     }
 
-    private static void deleteRegistrationForAccount(Account account) {
+    public static void deleteRegistrationForAccount(Account account) {
         Context context = MainApp.getAppContext();
         OwnCloudAccount ocAccount = null;
         arbitraryDataProvider = new ArbitraryDataProvider(MainApp.getAppContext().getContentResolver());
@@ -175,8 +175,6 @@ public class PushUtils {
                     }
                 }
             }
-
-
         } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
             Log_OC.d(TAG, "Failed to find an account");
         } catch (AuthenticatorException e) {

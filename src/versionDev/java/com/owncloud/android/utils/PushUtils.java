@@ -36,4 +36,8 @@ public class PushUtils {
         Context context = MainApp.getAppContext();
         PreferenceManager.setKeysReInit(context);
     }
+    
+    public static void deleteRegistrationForAccount() {
+        // do nothing
+    }
 }
