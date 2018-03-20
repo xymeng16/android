@@ -95,6 +95,7 @@ public class Preferences extends PreferenceActivity
     public static final String LOCK_PASSCODE = "passcode";
     public static final String LOCK_DEVICE_CREDENTIALS = "device_credentials";
 
+    public final static String PREFERENCE_USE_FINGERPRINT = "use_fingerprint";
     public static final String PREFERENCE_EXPERT_MODE = "expert_mode";
 
     private static final String SCREEN_NAME = "Settings";
