@@ -1010,6 +1010,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private boolean isHaveMultipleAccount() {
+        mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
         return mAccountManager.getAccountsByType(MainApp.getAccountType()).length > 1;
     }
 
