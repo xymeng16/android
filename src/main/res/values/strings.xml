@@ -775,6 +775,8 @@
     <string name="notification_channel_push_name">Push notifications</string>
     <string name="notification_channel_push_description">Show push notifications sent by server, e.g. when mentioned in comments, you receive a new remote share or an announcement was posted by an admin.</string>
     <string name="sendbutton_description">Send button icon</string>
+    <string name="prefs_e2e_mnemonic">E2E mnemonic</string>
     <string name="whats_new_device_credentials_title">Use Android\'s device internal protection</string>
     <string name="whats_new_device_credentials_content">Use anything like a pattern, password, pin or your fingerprint to keep your data safe.</string>
+    <string name="prefs_e2e_no_device_credentials">To show mnemonic please enable device credentials.</string>
 </resources>
