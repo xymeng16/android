@@ -43,6 +43,7 @@ import android.text.TextUtils;
 import android.view.WindowManager;
 
 import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.datamodel.ArbitraryDataProvider;
@@ -55,6 +56,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datastorage.DataStorageProvider;
 import com.owncloud.android.datastorage.StoragePoint;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.jobs.MediaFoldersDetectionJob;
 import com.owncloud.android.jobs.NCJobCreator;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy;
@@ -75,6 +77,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -159,6 +162,20 @@ public class MainApp extends MultiDexApplication {
         initSyncOperations();
         initContactsBackup();
         notificationChannels();
+
+
+        new JobRequest.Builder(MediaFoldersDetectionJob.TAG)
+                .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(5))
+                .setUpdateCurrent(true)
+                .build()
+                .schedule();
+
+        new JobRequest.Builder(MediaFoldersDetectionJob.TAG)
+                .startNow()
+                .setUpdateCurrent(false)
+                .build()
+                .schedule();
+
 
         // register global protection with pass code
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -332,6 +349,10 @@ public class MainApp extends MultiDexApplication {
                 createChannel(notificationManager, NotificationUtils.NOTIFICATION_CHANNEL_PUSH,
                         R.string.notification_channel_push_name, R.string
                                 .notification_channel_push_description, context, NotificationManager.IMPORTANCE_DEFAULT);
+
+                createChannel(notificationManager, NotificationUtils.NOTIFICATION_CHANNEL_GENERAL, R.string
+                        .notification_channel_general_name, R.string.notification_channel_general_description,
+                        context, NotificationManager.IMPORTANCE_DEFAULT);
             } else {
                 Log_OC.e(TAG, "Notification manager is null");
             }
@@ -541,8 +562,8 @@ public class MainApp extends MultiDexApplication {
 
             SyncedFolderProvider syncedFolderProvider = new SyncedFolderProvider(contentResolver);
 
-            final List<MediaFolder> imageMediaFolders = MediaProvider.getImageFolders(contentResolver, 1, null);
-            final List<MediaFolder> videoMediaFolders = MediaProvider.getVideoFolders(contentResolver, 1, null);
+            final List<MediaFolder> imageMediaFolders = MediaProvider.getImageFolders(contentResolver, 1, null, true);
+            final List<MediaFolder> videoMediaFolders = MediaProvider.getVideoFolders(contentResolver, 1, null, true);
 
             ArrayList<Long> idsToDelete = new ArrayList<>();
             List<SyncedFolder> syncedFolders = syncedFolderProvider.getSyncedFolders();
