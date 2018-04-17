@@ -42,6 +42,12 @@
         android:showAsAction="never"
         android:orderInCategory="1" />
     <item
+        android:id="@+id/action_stream_media"
+        android:title="@string/stream"
+        app:showAsAction="never"
+        android:showAsAction="never"
+        android:orderInCategory="1"/>
+    <item
         android:id="@+id/action_sync_file"
         android:title="@string/filedetails_sync_file"
         app:showAsAction="never"

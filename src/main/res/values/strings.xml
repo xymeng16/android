@@ -784,4 +784,7 @@
     <string name="upload_content_from_other_apps">Upload content from other apps</string>
     <string name="create_new_folder">Create new folder</string>
     <string name="uploads_view_upload_status_virus_detected">Virus detected. Upload cannot be completed!</string>
+    <string name="stream">Stream with…</string>
+    <string name="stream_not_possible_headline">Internal streaming not possible</string>
+    <string name="stream_not_possible_message">Please download media instead or use external app.</string>
 </resources>

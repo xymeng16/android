@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
@@ -145,6 +146,8 @@ public class FileMenuFilter {
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean inSingleFileFragment) {
         boolean synchronizing = anyFileSynchronizing();
 
+        OCCapability capability = mComponentsGetter.getStorageManager().getCapability(mAccount.name);
+
         /// decision is taken for each possible action on a file in the menu
 
         // DOWNLOAD 
@@ -153,6 +156,14 @@ public class FileMenuFilter {
 
         } else {
             toShow.add(R.id.action_download_file);
+        }
+
+        // STREAM
+        if (mFiles.isEmpty() || !isSingleFile() || !isSingleMedia() ||
+                !AccountUtils.getServerVersion(mAccount).isMediaStreamingSupported()) {
+            toHide.add(R.id.action_stream_media);
+        } else {
+            toShow.add(R.id.action_stream_media);
         }
 
         // RENAME
@@ -234,7 +245,6 @@ public class FileMenuFilter {
         boolean shareWithUsersAllowed = (mContext != null &&
                 mContext.getResources().getBoolean(R.bool.share_with_users_feature));
 
-        OCCapability capability = mComponentsGetter.getStorageManager().getCapability(mAccount.name);
         boolean shareApiEnabled = capability != null &&
                 (capability.getFilesSharingApiEnabled().isTrue() ||
                         capability.getFilesSharingApiEnabled().isUnknown()
@@ -372,6 +382,11 @@ public class FileMenuFilter {
 
     private boolean isSingleImage() {
         return isSingleSelection() && MimeTypeUtil.isImage(mFiles.iterator().next());
+    }
+
+    private boolean isSingleMedia() {
+        OCFile file = mFiles.iterator().next();
+        return isSingleSelection() && (MimeTypeUtil.isVideo(file) || MimeTypeUtil.isAudio(file));
     }
 
     private boolean allFiles() {
