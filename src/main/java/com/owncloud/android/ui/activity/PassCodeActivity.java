@@ -34,6 +34,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,8 +103,7 @@ public class PassCodeActivity extends AppCompatActivity {
         mPassCodeEditTexts[0].setTextColor(primaryColor);
         mPassCodeEditTexts[0].getBackground().setColorFilter(primaryColor, PorterDuff.Mode.SRC_ATOP);
         mPassCodeEditTexts[0].requestFocus();
-        getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
+        
         mPassCodeEditTexts[1] = findViewById(R.id.txt1);
         mPassCodeEditTexts[1].setTextColor(primaryColor);
         mPassCodeEditTexts[1].getBackground().setColorFilter(primaryColor, PorterDuff.Mode.SRC_ATOP);
@@ -116,8 +116,9 @@ public class PassCodeActivity extends AppCompatActivity {
         mPassCodeEditTexts[3].setTextColor(primaryColor);
         mPassCodeEditTexts[3].getBackground().setColorFilter(primaryColor, PorterDuff.Mode.SRC_ATOP);
 
-        if (getWindow() != null) {
-            getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        Window window = getWindow();
+        if (window != null) {
+            window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
         
         if (ACTION_CHECK.equals(getIntent().getAction())) {
