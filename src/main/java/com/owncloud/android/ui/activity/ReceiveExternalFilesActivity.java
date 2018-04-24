@@ -169,6 +169,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             
             mFile = savedInstanceState.getParcelable(KEY_FILE);
         }
+        mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
 
         super.onCreate(savedInstanceState);
 
@@ -192,8 +193,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     protected void setAccount(Account account, boolean savedAccount) {
-        mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
-
         Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
         if (accounts.length == 0) {
             Log_OC.i(TAG, "No ownCloud account is available");
@@ -1010,7 +1009,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private boolean isHaveMultipleAccount() {
-        mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
         return mAccountManager.getAccountsByType(MainApp.getAccountType()).length > 1;
     }
 
