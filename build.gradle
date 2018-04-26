@@ -31,7 +31,7 @@ configurations.all {
 
 ext {
     supportLibraryVersion = '27.1.1'
-    googleLibraryVersion = '12.0.1'
+    googleLibraryVersion = '15.0.0'
     androidLibraryVersion = '1.0.40'
 
     travisBuild = System.getenv("TRAVIS") == "true"
