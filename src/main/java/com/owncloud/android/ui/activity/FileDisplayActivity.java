@@ -481,7 +481,7 @@ public class FileDisplayActivity extends HookActivity
                 updateActionBarTitleAndHomeButton(file);
             } else {
                 cleanSecondFragment();
-                if (file.isDown() && MimeTypeUtil.isVCard(file.getMimetype())) {
+                if (file.isDown() && MimeTypeUtil.isVCard(file.getMimeType())) {
                     startContactListFragment(file);
                 } else if (file.isDown() && PreviewTextFragment.canBePreviewed(file)) {
                     startTextPreview(file, false);
@@ -711,7 +711,7 @@ public class FileDisplayActivity extends HookActivity
                         if (PreviewMediaFragment.canBePreviewed(mWaitingToPreview)) {
                             startMediaPreview(mWaitingToPreview, 0, true, true);
                             detailsFragmentChanged = true;
-                        } else if (MimeTypeUtil.isVCard(mWaitingToPreview.getMimetype())) {
+                        } else if (MimeTypeUtil.isVCard(mWaitingToPreview.getMimeType())) {
                             startContactListFragment(mWaitingToPreview);
                             detailsFragmentChanged = true;
                         } else if (PreviewTextFragment.canBePreviewed(mWaitingToPreview)) {
@@ -2153,7 +2153,7 @@ public class FileDisplayActivity extends HookActivity
     private void sendDownloadedFile(String packageName, String activityName) {
         if (mWaitingToSend != null) {
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.setType(mWaitingToSend.getMimetype());
+            sendIntent.setType(mWaitingToSend.getMimeType());
             sendIntent.putExtra(Intent.EXTRA_STREAM, mWaitingToSend.getExposedFileUri(this));
             sendIntent.putExtra(Intent.ACTION_SEND, true);
 

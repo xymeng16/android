@@ -59,6 +59,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.ArbitraryDataProvider;
 import com.owncloud.android.datamodel.ExternalLinksProvider;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.ExternalLink;
 import com.owncloud.android.lib.common.ExternalLinkType;
@@ -83,6 +84,7 @@ import com.owncloud.android.ui.events.DummyDrawerEvent;
 import com.owncloud.android.ui.events.MenuItemClickEvent;
 import com.owncloud.android.ui.events.SearchEvent;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
+import com.owncloud.android.ui.trashbin.TrashbinActivity;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FilesSyncHelper;
 import com.owncloud.android.utils.ThemeUtils;
@@ -347,6 +349,14 @@ public abstract class DrawerActivity extends ToolbarActivity implements DisplayU
             navigationView.getMenu().removeItem(R.id.nav_videos);
         }
 
+        if (getAccount() != null) {
+            FileDataStorageManager storageManager = new FileDataStorageManager(getAccount(), getContentResolver());
+            OCCapability capability = storageManager.getCapability(getAccount().name);
+            if (capability.getFilesUndelete().isFalse() || capability.getFilesUndelete().isUnknown()) {
+                navigationView.getMenu().removeItem(R.id.nav_trashbin);
+            }
+        }
+
         if (getResources().getBoolean(R.bool.use_home) && navigationView.getMenu().findItem(R.id.nav_all_files) !=
                 null) {
             navigationView.getMenu().findItem(R.id.nav_all_files).setTitle(getResources().
@@ -442,6 +452,11 @@ public abstract class DrawerActivity extends ToolbarActivity implements DisplayU
                 Intent uploadListIntent = new Intent(getApplicationContext(), UploadListActivity.class);
                 uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(uploadListIntent);
+                break;
+            case R.id.nav_trashbin:
+                Intent trashbinIntent = new Intent(getApplicationContext(), TrashbinActivity.class);
+                trashbinIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(trashbinIntent);
                 break;
             case R.id.nav_activity:
                 Intent activityIntent = new Intent(getApplicationContext(), ActivitiesActivity.class);
