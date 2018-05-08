@@ -15,7 +15,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.google.gms:google-services:3.3.0'
     }
 }
 
@@ -31,7 +31,6 @@ configurations.all {
 
 ext {
     supportLibraryVersion = '27.1.1'
-    googleLibraryVersion = '15.0.0'
     androidLibraryVersion = '1.0.40'
 
     travisBuild = System.getenv("TRAVIS") == "true"
@@ -217,10 +216,10 @@ dependencies {
     implementation 'com.afollestad:sectioned-recyclerview:0.5.0'
 
     // uncomment for gplay
-    // implementation "com.google.firebase:firebase-messaging:${googleLibraryVersion}"
-    // implementation "com.google.android.gms:play-services-base:${googleLibraryVersion}"
-    // implementation "com.google.android.gms:play-services-gcm:${googleLibraryVersion}"
-    // implementation "com.google.firebase:firebase-core:${googleLibraryVersion}"
+    // implementation "com.google.firebase:firebase-messaging:15.0.2"
+    // implementation "com.google.android.gms:play-services-base:15.0.1"
+    // implementation "com.google.android.gms:play-services-gcm:15.0.1"
+    // implementation "com.google.firebase:firebase-core:15.0.2"
     implementation 'org.parceler:parceler-api:1.1.9'
     annotationProcessor 'org.parceler:parceler:1.1.9'
     implementation ('com.github.bumptech.glide:glide:3.7.0') {
@@ -269,4 +268,4 @@ android.applicationVariants.all { variant ->
 }
 
 // uncomment for gplay (must be at the bottom)
-//apply plugin: 'com.google.gms.google-services'
+// apply plugin: 'com.google.gms.google-services'
