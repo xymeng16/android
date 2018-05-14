@@ -20,6 +20,7 @@
 package com.owncloud.android.utils;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -82,6 +83,21 @@ public class FileStorageUtils {
      */
     public static String getTemporalPath(String accountName) {
         return MainApp.getStoragePath()
+                + File.separator
+                + MainApp.getDataFolder()
+                + File.separator
+                + "tmp"
+                + File.separator
+                + Uri.encode(accountName, "@");
+        // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names,
+        // that can be in the accountName since 0.1.190B
+    }
+
+    /**
+     * Get absolute path to tmp folder inside app folder for given accountName.
+     */
+    public static String getInternalTemporalPath(String accountName, Context context) {
+        return context.getFilesDir()
                 + File.separator
                 + MainApp.getDataFolder()
                 + File.separator
@@ -313,7 +329,7 @@ public class FileStorageUtils {
         return ret;
     }
 
-    public static boolean moveFile(File sourceFile, File targetFile) throws IOException {
+    public static boolean moveFile(File sourceFile, File targetFile) {
         if (copyFile(sourceFile, targetFile)) {
             return sourceFile.delete();
         } else {
