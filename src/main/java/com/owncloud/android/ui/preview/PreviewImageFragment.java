@@ -186,8 +186,6 @@ public class PreviewImageFragment extends FileFragment {
         mImageView = view.findViewById(R.id.image);
         mImageView.setVisibility(View.GONE);
 
-        view.setOnClickListener(v -> togglePreviewImageFullScreen());
-
         mImageView.setOnPhotoTapListener((view1, x, y) -> togglePreviewImageFullScreen());
 
         mMultiView = view.findViewById(R.id.multi_view);
@@ -445,6 +443,11 @@ public class PreviewImageFragment extends FileFragment {
 
     private void seeDetails() {
         mContainerActivity.showDetails(getFile());
+    }
+
+    private void promptToDownloadFullImage() {
+        Snackbar.make(mMultiView, R.string.resized_images_download_full_image, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.common_yes, v -> downloadFile()).show();
     }
 
     private void downloadFile() {
