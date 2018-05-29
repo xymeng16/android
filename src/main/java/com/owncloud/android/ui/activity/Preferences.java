@@ -885,8 +885,7 @@ public class Preferences extends PreferenceActivity
             }
         }
     }
-
-    @NonNull
+    
     @Override
     @NonNull
     public MenuInflater getMenuInflater() {
