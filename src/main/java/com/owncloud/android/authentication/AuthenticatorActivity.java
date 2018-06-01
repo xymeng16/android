@@ -634,7 +634,7 @@ AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     private void initServerPreFragment(Bundle savedInstanceState) {
 
-        /// step 1 - load and process relevant inputs (resources, intent, savedInstanceState)
+        /// load and process relevant inputs (resources, intent, savedInstanceState)
         boolean isUrlInputAllowed = getResources().getBoolean(R.bool.show_server_url_input);
         if (savedInstanceState == null) {
             if (mAccount != null) {
@@ -670,82 +670,82 @@ AuthenticatorActivity extends AccountAuthenticatorActivity
         }
 
         if (!webViewLoginMethod) {
-            /// step 2 - set properties of UI elements (text, visibility, enabled...)
-            mHostUrlInput = findViewById(R.id.hostUrlInput);
-            // Convert IDN to Unicode
-            mHostUrlInput.setText(DisplayUtils.convertIdn(mServerInfo.mBaseUrl, false));
-            if (mAction != ACTION_CREATE) {
-                /// lock things that should not change
-                mHostUrlInput.setEnabled(false);
-                mHostUrlInput.setFocusable(false);
-            }
-            if (isUrlInputAllowed) {
-                mRefreshButton = findViewById(R.id.embeddedRefreshButton);
-            } else {
-                findViewById(R.id.hostUrlFrame).setVisibility(View.GONE);
-                mRefreshButton = findViewById(R.id.centeredRefreshButton);
-            }
-            showRefreshButton(mServerIsChecked && !mServerIsValid &&
-                    mWaitingForOpId > Integer.MAX_VALUE);
-            mServerStatusView = findViewById(R.id.server_status_text);
-            showServerStatus();
-
-            /// step 3 - bind some listeners and options
-            mHostUrlInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-            mHostUrlInput.setOnEditorActionListener(this);
-
-            /// step 4 - create listeners that will be bound at onResume
-            mHostUrlInputWatcher = new TextWatcher() {
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (mOkButton.isEnabled() &&
-                            !mServerInfo.mBaseUrl.equals(
-                                    AuthenticatorUrlUtils.normalizeUrl(s.toString(), mServerInfo.mIsSslConn))) {
-                        mOkButton.setEnabled(false);
-                    }
-                }
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    // not used at the moment
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (mAuthStatusIcon != 0) {
-                        Log_OC.d(TAG, "onTextChanged: hiding authentication status");
-                        mAuthStatusIcon = 0;
-                        mAuthStatusText = "";
-                        showAuthStatus();
-                    }
-                }
-            };
-
-
-            // TODO find out if this is really necessary, or if it can done in a different way
-            findViewById(R.id.scroll).setOnTouchListener(new OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN &&
-                            AccountTypeUtils
-                                    .getAuthTokenTypeSamlSessionCookie(MainApp
-                                            .getAccountType()).equals(mAuthTokenType) &&
-                            mHostUrlInput.hasFocus()) {
-                        checkOcServer();
-                    }
-                    return false;
-                }
-            });
+            setupLegacyLogin(isUrlInputAllowed);
         }
     }
 
+    private void setupLegacyLogin(boolean isUrlInputAllowed) {
+        /// set properties of UI elements (text, visibility, enabled...)
+        mHostUrlInput = findViewById(R.id.hostUrlInput);
+        // Convert IDN to Unicode
+        mHostUrlInput.setText(DisplayUtils.convertIdn(mServerInfo.mBaseUrl, false));
+        if (mAction != ACTION_CREATE) {
+            /// lock things that should not change
+            mHostUrlInput.setEnabled(false);
+            mHostUrlInput.setFocusable(false);
+        }
+        if (isUrlInputAllowed) {
+            mRefreshButton = findViewById(R.id.embeddedRefreshButton);
+        } else {
+            findViewById(R.id.hostUrlFrame).setVisibility(View.GONE);
+            mRefreshButton = findViewById(R.id.centeredRefreshButton);
+        }
+        showRefreshButton(mServerIsChecked && !mServerIsValid && mWaitingForOpId > Integer.MAX_VALUE);
+        mServerStatusView = findViewById(R.id.server_status_text);
+        showServerStatus();
+
+        /// step 3 - bind some listeners and options
+        mHostUrlInput.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mHostUrlInput.setOnEditorActionListener(this);
+
+        /// step 4 - create listeners that will be bound at onResume
+        mHostUrlInputWatcher = new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (mOkButton.isEnabled() &&
+                        !mServerInfo.mBaseUrl.equals(
+                                AuthenticatorUrlUtils.normalizeUrl(s.toString(), mServerInfo.mIsSslConn))) {
+                    mOkButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // not used at the moment
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (mAuthStatusIcon != 0) {
+                    Log_OC.d(TAG, "onTextChanged: hiding authentication status");
+                    mAuthStatusIcon = 0;
+                    mAuthStatusText = "";
+                    showAuthStatus();
+                }
+            }
+        };
+
+        // TODO find out if this is really necessary, or if it can done in a different way
+        findViewById(R.id.scroll).setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN &&
+                        AccountTypeUtils
+                                .getAuthTokenTypeSamlSessionCookie(MainApp
+                                        .getAccountType()).equals(mAuthTokenType) &&
+                        mHostUrlInput.hasFocus()) {
+                    checkOcServer();
+                }
+                return false;
+            }
+        });
+    }
 
     /**
      * @param savedInstanceState Saved activity state, as in {{@link #onCreate(Bundle)}
      */
     private void initAuthorizationPreFragment(Bundle savedInstanceState) {
-
         /// step 0 - get UI elements in layout
         mOAuth2Check = findViewById(R.id.oauth_onOff_check);
         mOAuthAuthEndpointText = findViewById(R.id.oAuthEntryPoint_1);
@@ -787,7 +787,6 @@ AuthenticatorActivity extends AccountAuthenticatorActivity
         showAuthStatus();
         mOkButton.setEnabled(mServerIsValid);
 
-
         /// step 3 - bind listeners
         // bindings for password input field
         mPasswordInput.setOnFocusChangeListener(this);
@@ -802,13 +801,11 @@ AuthenticatorActivity extends AccountAuthenticatorActivity
                 return true;
             }
         });
-
     }
 
 
     /**
-     * Changes the visibility of input elements depending on
-     * the current authorization method.
+     * Changes the visibility of input elements depending on the current authorization method.
      */
     private void updateAuthenticationPreFragmentVisibility() {
         if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
